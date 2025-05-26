@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { 
   FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, 
   FaBriefcase, FaGraduationCap, FaClock, FaBuilding,
-  FaLock, FaServer, FaBug
+  FaLock, FaServer, FaBug, FaBars, FaTimes
 } from 'react-icons/fa';
 
 const fadeInUp = {
@@ -74,7 +74,6 @@ const SkillTag = ({ skill }) => (
 );
 
 const ExperienceCard = ({ title, company, period, location, type, skills, description }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1
@@ -134,33 +133,19 @@ const ExperienceCard = ({ title, company, period, location, type, skills, descri
           </div>
         </motion.div>
 
-        <AnimatePresence>
-          <motion.div 
-            className="text-foreground/80"
-            initial={false}
-            animate={{ height: isExpanded ? 'auto' : '3em' }}
-            transition={{ duration: 0.3 }}
-          >
-            {description.map((item, index) => (
-              <motion.p 
-                key={index} 
-                variants={fadeInUp}
-                className="mb-2"
-              >
-                • {item}
-              </motion.p>
-            ))}
-          </motion.div>
-        </AnimatePresence>
-
-        <motion.button 
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="text-primary hover:text-primary/80 text-sm mt-2 flex items-center gap-1"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+        <motion.div 
+          className="text-foreground/80"
         >
-          {isExpanded ? 'Show less' : 'Read more'}
-        </motion.button>
+          {description.map((item, index) => (
+            <motion.p 
+              key={index} 
+              variants={fadeInUp}
+              className="mb-2"
+            >
+              • {item}
+            </motion.p>
+          ))}
+        </motion.div>
 
         <motion.div 
           className="flex flex-wrap gap-2 mt-4"
@@ -191,11 +176,11 @@ const ProjectCard = ({ title, description, icon: Icon, skills = [] }) => {
     >
       <div className="flex items-start gap-4">
         <div className="project-icon">
-          <Icon className="text-2xl" />
+          <Icon className="text-2xl text-white" />
         </div>
         <div className="flex-1">
-          <h3 className="text-xl font-semibold text-primary mb-2">{title}</h3>
-          <div className="space-y-2 text-foreground/80">
+          <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
+          <div className="space-y-2 text-white/90">
             {description.map((desc, index) => (
               <p key={index}>{desc}</p>
             ))}
@@ -217,6 +202,8 @@ const ProjectCard = ({ title, description, icon: Icon, skills = [] }) => {
 };
 
 function App() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const experiences = [
     {
       title: "Software & DevOps Engineer | Azure + GitHub Actions",
@@ -355,26 +342,45 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className='min-h-screen bg-background text-foreground'>
       {/* Navigation */}
-      <motion.nav 
-        className="fixed top-0 left-0 w-full z-50 glass-effect"
+      <motion.nav
+        className='fixed top-0 left-0 w-full z-50 glass-effect'
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <div className="container mx-auto px-6 py-4">
+        <div className='container mx-auto px-6 py-4'>
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex justify-end">
+            <motion.button
+              className="text-primary p-2"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            </motion.button>
+          </div>
+
+          {/* Desktop Navigation */}
           <motion.div 
-            className="flex justify-center space-x-8"
+            className='hidden md:flex justify-center space-x-8'
             variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
+            initial='hidden'
+            animate='visible'
           >
-            {['about', 'projects', 'experience', 'education', 'certifications'].map((item) => (
+            {[
+              "about",
+              "projects",
+              "experience",
+              "education",
+              "certifications",
+            ].map((item) => (
               <motion.a
                 key={item}
                 href={`#${item}`}
-                className="nav-link capitalize"
+                className='nav-link'
                 variants={fadeInUp}
                 whileHover={{ y: -2 }}
                 whileTap={{ y: 0 }}
@@ -383,49 +389,82 @@ function App() {
               </motion.a>
             ))}
           </motion.div>
+
+          {/* Mobile Navigation */}
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                className="md:hidden absolute top-full left-0 w-full bg-background/95 backdrop-blur-lg"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="flex flex-col items-center py-4 space-y-4">
+                  {[
+                    "about",
+                    "projects",
+                    "experience",
+                    "education",
+                    "certifications",
+                  ].map((item) => (
+                    <motion.a
+                      key={item}
+                      href={`#${item}`}
+                      className='nav-link text-lg capitalize'
+                      variants={fadeInUp}
+                      whileHover={{ x: 10 }}
+                      whileTap={{ x: 0 }}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item}
+                    </motion.a>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.nav>
 
       {/* Header/Hero Section */}
-      <header className="relative min-h-screen flex items-center justify-center hero-gradient pt-20">
+      <header className='relative min-h-screen flex items-center justify-center hero-gradient pt-20'>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center px-4"
+          className='text-center px-4'
         >
-          <motion.div
-            className="float-animation"
-          >
-            <motion.div 
-              className="profile-image mx-auto"
+          <motion.div className='float-animation'>
+            <motion.div
+              className='profile-image mx-auto'
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ 
+              transition={{
                 type: "spring",
                 stiffness: 260,
                 damping: 20,
-                delay: 0.2 
+                delay: 0.2,
               }}
             >
-              <motion.img 
-                src="https://placekitten.com/500/500" 
-                alt="Replace with your professional headshot" 
-                className="opacity-90 hover:opacity-100 transition-opacity"
+              <motion.img
+                src='images/ben.jpeg'
+                alt='Replace with your professional headshot'
+                className='opacity-90 hover:opacity-100 transition-opacity'
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
               />
             </motion.div>
-            <motion.h1 
-              className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent"
+            <motion.h1
+              className='text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
               Sedthawuth Maisonti
             </motion.h1>
-            <motion.h2 
-              className="text-2xl md:text-3xl text-primary/80 mb-6"
+            <motion.h2
+              className='text-2xl md:text-3xl text-primary/80 mb-6'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -433,33 +472,36 @@ function App() {
               (Benning)
             </motion.h2>
           </motion.div>
-          
-          <motion.p 
-            className="text-xl md:text-2xl max-w-3xl mx-auto text-foreground/80 mb-8"
+
+          <motion.p
+            className='text-xl md:text-2xl max-w-3xl mx-auto text-foreground/80 mb-8'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
             Cybersecurity Professional & Software Engineer
           </motion.p>
-          
-          <motion.div 
-            className="flex justify-center gap-8 mt-8"
+
+          <motion.div
+            className='flex justify-center gap-8 mt-8'
             variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
+            initial='hidden'
+            animate='visible'
           >
             {[
               { href: "https://github.com/benning55", icon: FaGithub },
-              { href: "https://linkedin.com/in/sedthawuth-benning", icon: FaLinkedin },
-              { href: "mailto:bmaisonti@gmail.com", icon: FaEnvelope }
+              {
+                href: "https://linkedin.com/in/sedthawuth-benning",
+                icon: FaLinkedin,
+              },
+              { href: "mailto:bmaisonti@gmail.com", icon: FaEnvelope },
             ].map((social, index) => (
-              <motion.a 
+              <motion.a
                 key={index}
                 href={social.href}
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-3xl text-primary/80 hover:text-primary transition-colors"
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-3xl text-primary/80 hover:text-primary transition-colors'
                 variants={scaleIn}
                 whileHover={{ scale: 1.2, rotate: 5 }}
                 whileTap={{ scale: 0.9 }}
@@ -471,36 +513,32 @@ function App() {
         </motion.div>
       </header>
 
-      <main className="container mx-auto px-4 py-16">
+      <main className='container mx-auto px-4 py-16'>
         {/* About Section */}
-        <Section id="about">
-          <motion.h2 
-            variants={fadeInUp}
-            className="section-title"
-          >
+        <Section id='about'>
+          <motion.h2 variants={fadeInUp} className='section-title'>
             Professional Summary
           </motion.h2>
-          <motion.p 
+          <motion.p
             variants={fadeInUp}
-            className="text-lg text-foreground/80 leading-relaxed"
+            className='text-lg text-foreground/80 leading-relaxed'
             whileHover={{ scale: 1.01 }}
             transition={{ duration: 0.2 }}
           >
-            Results-driven Master's student in Cybersecurity at NYIT Vancouver with over three years of IT experience, 
-            including software engineering and DevOps. Proficient in Python, GoLang, and Docker, with a strong foundation 
-            in cybersecurity principles, system security, and threat mitigation.
+            Results-driven Master's student in Cybersecurity at NYIT Vancouver
+            with over three years of IT experience, including software
+            engineering and DevOps. Proficient in Python, GoLang, and Docker,
+            with a strong foundation in cybersecurity principles, system
+            security, and threat mitigation.
           </motion.p>
         </Section>
 
         {/* Projects Section */}
-        <Section id="projects" delay={0.1}>
-          <motion.h2 
-            variants={fadeInUp}
-            className="section-title"
-          >
+        <Section id='projects' delay={0.1}>
+          <motion.h2 variants={fadeInUp} className='section-title'>
             Featured Projects
           </motion.h2>
-          <div className="grid grid-cols-1 gap-6">
+          <div className='grid grid-cols-1 gap-6'>
             {projects.map((project, index) => (
               <ProjectCard key={index} {...project} />
             ))}
@@ -508,14 +546,11 @@ function App() {
         </Section>
 
         {/* Experience Section */}
-        <Section id="experience" delay={0.2}>
-          <motion.h2 
-            variants={fadeInUp}
-            className="section-title"
-          >
+        <Section id='experience' delay={0.2}>
+          <motion.h2 variants={fadeInUp} className='section-title'>
             Work Experience
           </motion.h2>
-          <div className="space-y-6 relative pl-4">
+          <div className='space-y-6 relative pl-4'>
             {experiences.map((exp, index) => (
               <ExperienceCard key={index} {...exp} />
             ))}
@@ -523,42 +558,47 @@ function App() {
         </Section>
 
         {/* Education Section */}
-        <Section id="education" delay={0.4}>
-          <motion.h2 
-            variants={fadeInUp}
-            className="section-title"
-          >
+        <Section id='education' delay={0.4}>
+          <motion.h2 variants={fadeInUp} className='section-title'>
             Education
           </motion.h2>
-          <div className="grid gap-6">
-            <motion.div 
-              className="experience-card glow-animation"
+          <div className='grid gap-6'>
+            <motion.div
+              className='experience-card glow-animation'
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="flex items-start gap-4">
-                <FaGraduationCap className="text-3xl text-primary mt-1" />
+              <div className='flex items-start gap-4'>
+                <FaGraduationCap className='text-3xl text-primary mt-1' />
                 <div>
-                  <h3 className="text-xl font-semibold">Master of Science in Cybersecurity</h3>
-                  <p className="text-primary">New York Institute of Technology Vancouver Campus</p>
-                  <p className="text-foreground/80">May 2024 - Aug 2026</p>
-                  <p className="text-primary">GPA: 3.40</p>
+                  <h3 className='text-xl font-semibold'>
+                    Master of Science in Cybersecurity
+                  </h3>
+                  <p className='text-primary'>
+                    New York Institute of Technology Vancouver Campus
+                  </p>
+                  <p className='text-foreground/80'>May 2024 - Aug 2026</p>
+                  <p className='text-primary'>GPA: 3.40</p>
                 </div>
               </div>
             </motion.div>
 
-            <motion.div 
-              className="experience-card"
+            <motion.div
+              className='experience-card'
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="flex items-start gap-4">
-                <FaGraduationCap className="text-3xl text-primary mt-1" />
+              <div className='flex items-start gap-4'>
+                <FaGraduationCap className='text-3xl text-primary mt-1' />
                 <div>
-                  <h3 className="text-xl font-semibold">Bachelor of Science in Information Technology</h3>
-                  <p className="text-primary">King Mongkut's Institute of Technology Ladkrabang</p>
-                  <p className="text-foreground/80">Aug 2017 – Jun 2021</p>
-                  <p className="text-primary">GPA: 3.05</p>
+                  <h3 className='text-xl font-semibold'>
+                    Bachelor of Science in Information Technology
+                  </h3>
+                  <p className='text-primary'>
+                    King Mongkut's Institute of Technology Ladkrabang
+                  </p>
+                  <p className='text-foreground/80'>Aug 2017 – Jun 2021</p>
+                  <p className='text-primary'>GPA: 3.05</p>
                 </div>
               </div>
             </motion.div>
@@ -566,63 +606,59 @@ function App() {
         </Section>
 
         {/* Certifications Section */}
-        <Section id="certifications" delay={0.6}>
-          <motion.h2 
-            variants={fadeInUp}
-            className="section-title"
-          >
+        <Section id='certifications' delay={0.6}>
+          <motion.h2 variants={fadeInUp} className='section-title'>
             Certifications
           </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <motion.div 
-              className="experience-card"
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+            <motion.div
+              className='experience-card'
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <h3 className="text-xl font-semibold">Certified in Cybersecurity (CC)</h3>
-              <p className="text-primary">ISC2</p>
-              <p className="text-foreground/80">Dec 2024 - Dec 2027</p>
+              <h3 className='text-xl font-semibold'>
+                Certified in Cybersecurity (CC)
+              </h3>
+              <p className='text-primary'>ISC2</p>
+              <p className='text-foreground/80'>Dec 2024 - Dec 2027</p>
             </motion.div>
-            <motion.div 
-              className="experience-card"
+            <motion.div
+              className='experience-card'
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <h3 className="text-xl font-semibold">Azure Fundamentals</h3>
-              <p className="text-primary">Microsoft</p>
-              <p className="text-foreground/80">Apr 2025</p>
+              <h3 className='text-xl font-semibold'>Azure Fundamentals</h3>
+              <p className='text-primary'>Microsoft</p>
+              <p className='text-foreground/80'>Apr 2025</p>
             </motion.div>
-            <motion.div 
-              className="experience-card"
+            <motion.div
+              className='experience-card'
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <h3 className="text-xl font-semibold">SOC Fundamentals</h3>
-              <p className="text-primary">LetsDefend</p>
-              <p className="text-foreground/80">Feb 2025</p>
+              <h3 className='text-xl font-semibold'>SOC Fundamentals</h3>
+              <p className='text-primary'>LetsDefend</p>
+              <p className='text-foreground/80'>Feb 2025</p>
             </motion.div>
           </div>
         </Section>
       </main>
 
       {/* Footer */}
-      <motion.footer 
-        className="bg-muted/30 py-8 border-t border-border/50"
+      <motion.footer
+        className='bg-muted/30 py-8 border-t border-border/50'
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="container mx-auto px-4 text-center">
-          <motion.p 
-            className="text-foreground/60"
-            whileHover={{ scale: 1.05 }}
-          >
+        <div className='container mx-auto px-4 text-center'>
+          <motion.p className='text-foreground/60' whileHover={{ scale: 1.05 }}>
             © 2024 Sedthawuth Maisonti. All rights reserved.
           </motion.p>
         </div>
       </motion.footer>
     </div>
-  );
+  )
 }
 
 export default App;
