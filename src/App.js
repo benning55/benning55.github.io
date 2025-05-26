@@ -103,19 +103,19 @@ const ExperienceCard = ({ title, company, period, location, type, skills, descri
           <div>
             <motion.h3 
               variants={fadeInUp}
-              className="text-xl font-semibold text-primary"
+              className="text-xl font-semibold text-white"
             >
               {title}
             </motion.h3>
             <motion.p 
               variants={fadeInUp}
-              className="text-lg text-foreground/90"
+              className="text-lg text-white/90"
             >
               {company}
             </motion.p>
             <motion.div 
               variants={staggerContainer}
-              className="flex items-center text-muted-foreground text-sm mt-2 flex-wrap gap-4"
+              className="flex items-center text-white/70 text-sm mt-2 flex-wrap gap-4"
             >
               <motion.div variants={fadeInUp} className="flex items-center">
                 <FaMapMarkerAlt className="mr-1" />
@@ -130,11 +130,11 @@ const ExperienceCard = ({ title, company, period, location, type, skills, descri
                 <span>{period}</span>
               </motion.div>
             </motion.div>
-          </div>
+      </div>
         </motion.div>
 
         <motion.div 
-          className="text-foreground/80"
+          className="text-white/90"
         >
           {description.map((item, index) => (
             <motion.p 
@@ -342,7 +342,7 @@ function App() {
   ];
 
   return (
-    <div className='min-h-screen bg-background text-foreground'>
+    <div className='min-h-screen bg-background text-white'>
       {/* Navigation */}
       <motion.nav
         className='fixed top-0 left-0 w-full z-50 glass-effect'
@@ -354,14 +354,14 @@ function App() {
           {/* Mobile Menu Button */}
           <div className="md:hidden flex justify-end">
             <motion.button
-              className="text-primary p-2"
+              className="text-white p-2"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
               {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
             </motion.button>
-          </div>
+      </div>
 
           {/* Desktop Navigation */}
           <motion.div 
@@ -380,7 +380,7 @@ function App() {
               <motion.a
                 key={item}
                 href={`#${item}`}
-                className='nav-link'
+                className='nav-link text-white/90 hover:text-white'
                 variants={fadeInUp}
                 whileHover={{ y: -2 }}
                 whileTap={{ y: 0 }}
@@ -411,7 +411,7 @@ function App() {
                     <motion.a
                       key={item}
                       href={`#${item}`}
-                      className='nav-link text-lg capitalize'
+                      className='nav-link text-white/90 hover:text-white text-lg capitalize'
                       variants={fadeInUp}
                       whileHover={{ x: 10 }}
                       whileTap={{ x: 0 }}
@@ -640,7 +640,7 @@ function App() {
               <p className='text-primary'>LetsDefend</p>
               <p className='text-foreground/80'>Feb 2025</p>
             </motion.div>
-          </div>
+      </div>
         </Section>
       </main>
 
