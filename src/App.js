@@ -230,15 +230,22 @@ function App() {
           className="text-center px-4"
         >
           <motion.div
-            className="float-animation mb-8"
+            className="float-animation"
           >
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-accent">
+            <div className="profile-image mx-auto">
+              <img 
+                src="https://placekitten.com/500/500" 
+                alt="Replace with your professional headshot" 
+                className="opacity-90 hover:opacity-100 transition-opacity"
+              />
+            </div>
+            <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
               Sedthawuth Maisonti
             </h1>
-            <h2 className="text-2xl md:text-3xl text-primary/80 mb-6">(Benning)</h2>
+            <h2 className="text-2xl md:text-3xl text-secondary/90 mb-6">(Benning)</h2>
           </motion.div>
           
-          <p className="text-xl md:text-2xl max-w-3xl mx-auto text-foreground/80 mb-8">
+          <p className="text-xl md:text-2xl max-w-3xl mx-auto text-foreground/90 mb-8">
             Cybersecurity Professional & Software Engineer
           </p>
           
@@ -247,7 +254,7 @@ function App() {
               href="https://github.com/benning55" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-3xl text-primary hover:text-primary/80 transition-colors"
+              className="text-3xl text-secondary hover:text-primary transition-colors"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -257,7 +264,7 @@ function App() {
               href="https://linkedin.com/in/sedthawuth-benning" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-3xl text-primary hover:text-primary/80 transition-colors"
+              className="text-3xl text-secondary hover:text-primary transition-colors"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -265,7 +272,7 @@ function App() {
             </motion.a>
             <motion.a 
               href="mailto:bmaisonti@gmail.com"
-              className="text-3xl text-primary hover:text-primary/80 transition-colors"
+              className="text-3xl text-secondary hover:text-primary transition-colors"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >

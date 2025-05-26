@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    --background: 220 40% 2%;
-    --foreground: 60 30% 96%;
-    --card: 220 40% 3%;
-    --card-foreground: 60 30% 96%;
-    --popover: 220 40% 3%;
-    --popover-foreground: 60 30% 96%;
-    --primary: 217 91% 60%;
+    --background: 230 35% 7%;
+    --foreground: 214 32% 91%;
+    --card: 230 35% 9%;
+    --card-foreground: 214 32% 91%;
+    --popover: 230 35% 9%;
+    --popover-foreground: 214 32% 91%;
+    --primary: 221 83% 53%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 217 91% 60%;
+    --secondary: 199 89% 48%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 220 40% 3%;
-    --muted-foreground: 217 91% 60%;
-    --accent: 217 91% 60%;
+    --muted: 230 35% 9%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 262 83% 58%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217 91% 60%;
-    --input: 217 91% 60%;
-    --ring: 217 91% 60%;
+    --border: 221 83% 53%;
+    --input: 221 83% 53%;
+    --ring: 221 83% 53%;
     --radius: 0.5rem;
   }
 
@@ -102,10 +102,10 @@ code {
 
 .hero-gradient {
   background: 
-    radial-gradient(circle at 50% 0%, rgba(var(--primary) / 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 85% 30%, rgba(var(--secondary) / 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 15% 70%, rgba(var(--accent) / 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 50% 100%, rgba(var(--primary) / 0.15) 0%, transparent 50%);
+    radial-gradient(circle at 50% 0%, rgba(var(--primary) / 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(var(--secondary) / 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 15% 70%, rgba(var(--accent) / 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, rgba(var(--primary) / 0.3) 0%, transparent 50%);
 }
 
 .glow {
@@ -143,4 +143,13 @@ code {
 .glass-effect {
   backdrop-filter: blur(8px);
   background: rgba(var(--card) / 0.8);
+}
+
+.profile-image {
+  @apply w-48 h-48 rounded-full border-4 border-primary/30 shadow-xl mb-8;
+  background: linear-gradient(45deg, rgb(var(--primary)), rgb(var(--accent)));
+}
+
+.profile-image img {
+  @apply w-full h-full rounded-full object-cover;
 }
