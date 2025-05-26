@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { 
   FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, 
-  FaBriefcase, FaGraduationCap, FaClock, FaBuilding 
+  FaBriefcase, FaGraduationCap, FaClock, FaBuilding,
+  FaLock, FaServer, FaBug
 } from 'react-icons/fa';
 
 const fadeInUp = {
@@ -174,6 +175,47 @@ const ExperienceCard = ({ title, company, period, location, type, skills, descri
   );
 };
 
+const ProjectCard = ({ title, description, icon: Icon, skills = [] }) => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  });
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={fadeInUp}
+      className="project-card"
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="flex items-start gap-4">
+        <div className="project-icon">
+          <Icon className="text-2xl" />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-xl font-semibold text-primary mb-2">{title}</h3>
+          <div className="space-y-2 text-foreground/80">
+            {description.map((desc, index) => (
+              <p key={index}>{desc}</p>
+            ))}
+          </div>
+          {skills.length > 0 && (
+            <motion.div 
+              className="flex flex-wrap gap-2 mt-4"
+              variants={staggerContainer}
+            >
+              {skills.map((skill, index) => (
+                <SkillTag key={index} skill={skill} />
+              ))}
+            </motion.div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 function App() {
   const experiences = [
     {
@@ -282,6 +324,36 @@ function App() {
     }
   ];
 
+  const projects = [
+    {
+      title: "Hybrid Key Exchange for Shopkati",
+      description: [
+        "Designed ECDH + Kyber hybrid key exchange for secure communication, enhancing post-quantum security.",
+        "Strengthened Shopkati's data protection framework by implementing advanced cryptographic techniques."
+      ],
+      icon: FaLock,
+      skills: ["Post-Quantum Cryptography", "ECDH", "Kyber", "Security Design", "Python"]
+    },
+    {
+      title: "Splunk SIEM Deployment",
+      description: [
+        "Deployed Splunk SIEM on AWS EC2 with Raspberry Pi forwarder, enabling real-time log monitoring over TCP (9997).",
+        "Configured laptops to forward events to Raspberry Pi, which then forwarded the events to the EC2 instance."
+      ],
+      icon: FaServer,
+      skills: ["Splunk", "AWS EC2", "SIEM", "Log Management", "TCP/IP", "Raspberry Pi"]
+    },
+    {
+      title: "Web Vulnerability Scan with OWASP ZAP",
+      description: [
+        "Scanned website for vulnerabilities using OWASP ZAP, identifying potential risks.",
+        "Analyzed findings to assess potential security threats and saved detailed reports for further action."
+      ],
+      icon: FaBug,
+      skills: ["OWASP ZAP", "Web Security", "Vulnerability Assessment", "Security Testing"]
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Navigation */}
@@ -298,7 +370,7 @@ function App() {
             initial="hidden"
             animate="visible"
           >
-            {['about', 'experience', 'education', 'certifications'].map((item) => (
+            {['about', 'projects', 'experience', 'education', 'certifications'].map((item) => (
               <motion.a
                 key={item}
                 href={`#${item}`}
@@ -418,6 +490,21 @@ function App() {
             including software engineering and DevOps. Proficient in Python, GoLang, and Docker, with a strong foundation 
             in cybersecurity principles, system security, and threat mitigation.
           </motion.p>
+        </Section>
+
+        {/* Projects Section */}
+        <Section id="projects" delay={0.1}>
+          <motion.h2 
+            variants={fadeInUp}
+            className="section-title"
+          >
+            Featured Projects
+          </motion.h2>
+          <div className="grid grid-cols-1 gap-6">
+            {projects.map((project, index) => (
+              <ProjectCard key={index} {...project} />
+            ))}
+          </div>
         </Section>
 
         {/* Experience Section */}
