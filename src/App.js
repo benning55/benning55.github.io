@@ -353,7 +353,7 @@ function App() {
               Sedthawuth Maisonti
             </motion.h1>
             <motion.h2 
-              className="text-2xl md:text-3xl text-secondary mb-6"
+              className="text-2xl md:text-3xl text-primary/80 mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -363,7 +363,7 @@ function App() {
           </motion.div>
           
           <motion.p 
-            className="text-xl md:text-2xl max-w-3xl mx-auto text-foreground/90 mb-8"
+            className="text-xl md:text-2xl max-w-3xl mx-auto text-foreground/80 mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
@@ -387,7 +387,7 @@ function App() {
                 href={social.href}
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-3xl text-secondary hover:text-primary transition-colors"
+                className="text-3xl text-primary/80 hover:text-primary transition-colors"
                 variants={scaleIn}
                 whileHover={{ scale: 1.2, rotate: 5 }}
                 whileTap={{ scale: 0.9 }}
@@ -520,7 +520,7 @@ function App() {
 
       {/* Footer */}
       <motion.footer 
-        className="bg-card py-8 border-t border-primary/20"
+        className="bg-muted/30 py-8 border-t border-border/50"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
