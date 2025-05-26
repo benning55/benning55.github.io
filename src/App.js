@@ -6,9 +6,38 @@ import {
   FaBriefcase, FaGraduationCap, FaClock, FaBuilding 
 } from 'react-icons/fa';
 
-const fadeIn = {
+const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const scaleIn = {
+  hidden: { scale: 0.8, opacity: 0 },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
 };
 
 const Section = ({ children, delay = 0, id }) => {
@@ -23,7 +52,7 @@ const Section = ({ children, delay = 0, id }) => {
       ref={ref}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      variants={fadeIn}
+      variants={staggerContainer}
       transition={{ duration: 0.6, delay }}
       className="mb-16"
     >
@@ -35,7 +64,8 @@ const Section = ({ children, delay = 0, id }) => {
 const SkillTag = ({ skill }) => (
   <motion.span 
     className="skill-tag"
-    whileHover={{ scale: 1.05 }}
+    variants={fadeInUp}
+    whileHover={{ scale: 1.05, y: -2 }}
     whileTap={{ scale: 0.95 }}
   >
     {skill}
@@ -44,56 +74,101 @@ const SkillTag = ({ skill }) => (
 
 const ExperienceCard = ({ title, company, period, location, type, skills, description }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  });
 
   return (
     <motion.div 
+      ref={ref}
+      variants={fadeInUp}
       className="experience-card mb-8 relative"
-      whileHover={{ scale: 1.01 }}
+      whileHover={{ scale: 1.01, y: -2 }}
       transition={{ duration: 0.2 }}
     >
       <div className="absolute -left-3 top-0 h-full timeline-line" />
-      <div className="timeline-dot" />
+      <motion.div 
+        className="timeline-dot"
+        initial={{ scale: 0 }}
+        animate={inView ? { scale: 1 } : { scale: 0 }}
+        transition={{ delay: 0.2 }}
+      />
       
       <div className="ml-6">
-        <div className="flex justify-between items-start mb-4 flex-wrap">
+        <motion.div 
+          className="flex justify-between items-start mb-4 flex-wrap"
+          variants={staggerContainer}
+        >
           <div>
-            <h3 className="text-xl font-semibold text-primary">{title}</h3>
-            <p className="text-lg text-foreground/90">{company}</p>
-            <div className="flex items-center text-muted-foreground text-sm mt-2 flex-wrap gap-4">
-              <div className="flex items-center">
+            <motion.h3 
+              variants={fadeInUp}
+              className="text-xl font-semibold text-primary"
+            >
+              {title}
+            </motion.h3>
+            <motion.p 
+              variants={fadeInUp}
+              className="text-lg text-foreground/90"
+            >
+              {company}
+            </motion.p>
+            <motion.div 
+              variants={staggerContainer}
+              className="flex items-center text-muted-foreground text-sm mt-2 flex-wrap gap-4"
+            >
+              <motion.div variants={fadeInUp} className="flex items-center">
                 <FaMapMarkerAlt className="mr-1" />
                 <span>{location}</span>
-              </div>
-              <div className="flex items-center">
+              </motion.div>
+              <motion.div variants={fadeInUp} className="flex items-center">
                 <FaBuilding className="mr-1" />
                 <span>{type}</span>
-              </div>
-              <div className="flex items-center">
+              </motion.div>
+              <motion.div variants={fadeInUp} className="flex items-center">
                 <FaClock className="mr-1" />
                 <span>{period}</span>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
-        </div>
-        
-        <div className={`text-foreground/80 ${isExpanded ? '' : 'line-clamp-2'}`}>
-          {description.map((item, index) => (
-            <p key={index} className="mb-2">• {item}</p>
-          ))}
-        </div>
-        
-        <button 
+        </motion.div>
+
+        <AnimatePresence>
+          <motion.div 
+            className="text-foreground/80"
+            initial={false}
+            animate={{ height: isExpanded ? 'auto' : '3em' }}
+            transition={{ duration: 0.3 }}
+          >
+            {description.map((item, index) => (
+              <motion.p 
+                key={index} 
+                variants={fadeInUp}
+                className="mb-2"
+              >
+                • {item}
+              </motion.p>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        <motion.button 
           onClick={() => setIsExpanded(!isExpanded)}
           className="text-primary hover:text-primary/80 text-sm mt-2 flex items-center gap-1"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
           {isExpanded ? 'Show less' : 'Read more'}
-        </button>
+        </motion.button>
 
-        <div className="flex flex-wrap gap-2 mt-4">
+        <motion.div 
+          className="flex flex-wrap gap-2 mt-4"
+          variants={staggerContainer}
+        >
           {skills.map((skill, index) => (
             <SkillTag key={index} skill={skill} />
           ))}
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   );
@@ -210,16 +285,34 @@ function App() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-50 glass-effect">
+      <motion.nav 
+        className="fixed top-0 left-0 w-full z-50 glass-effect"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
         <div className="container mx-auto px-6 py-4">
-          <div className="flex justify-center space-x-8">
-            <a href="#about" className="nav-link">About</a>
-            <a href="#experience" className="nav-link">Experience</a>
-            <a href="#education" className="nav-link">Education</a>
-            <a href="#certifications" className="nav-link">Certifications</a>
-          </div>
+          <motion.div 
+            className="flex justify-center space-x-8"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            {['about', 'experience', 'education', 'certifications'].map((item) => (
+              <motion.a
+                key={item}
+                href={`#${item}`}
+                className="nav-link capitalize"
+                variants={fadeInUp}
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 0 }}
+              >
+                {item}
+              </motion.a>
+            ))}
+          </motion.div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Header/Hero Section */}
       <header className="relative min-h-screen flex items-center justify-center hero-gradient pt-20">
@@ -232,61 +325,91 @@ function App() {
           <motion.div
             className="float-animation"
           >
-            <div className="profile-image mx-auto">
-              <img 
+            <motion.div 
+              className="profile-image mx-auto"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ 
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+                delay: 0.2 
+              }}
+            >
+              <motion.img 
                 src="https://placekitten.com/500/500" 
                 alt="Replace with your professional headshot" 
                 className="opacity-90 hover:opacity-100 transition-opacity"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
               />
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
+            </motion.div>
+            <motion.h1 
+              className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
               Sedthawuth Maisonti
-            </h1>
-            <h2 className="text-2xl md:text-3xl text-secondary/90 mb-6">(Benning)</h2>
+            </motion.h1>
+            <motion.h2 
+              className="text-2xl md:text-3xl text-secondary mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              (Benning)
+            </motion.h2>
           </motion.div>
           
-          <p className="text-xl md:text-2xl max-w-3xl mx-auto text-foreground/90 mb-8">
+          <motion.p 
+            className="text-xl md:text-2xl max-w-3xl mx-auto text-foreground/90 mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+          >
             Cybersecurity Professional & Software Engineer
-          </p>
+          </motion.p>
           
-          <div className="flex justify-center gap-8 mt-8">
-            <motion.a 
-              href="https://github.com/benning55" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-3xl text-secondary hover:text-primary transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FaGithub />
-            </motion.a>
-            <motion.a 
-              href="https://linkedin.com/in/sedthawuth-benning" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-3xl text-secondary hover:text-primary transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FaLinkedin />
-            </motion.a>
-            <motion.a 
-              href="mailto:bmaisonti@gmail.com"
-              className="text-3xl text-secondary hover:text-primary transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FaEnvelope />
-            </motion.a>
-          </div>
+          <motion.div 
+            className="flex justify-center gap-8 mt-8"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            {[
+              { href: "https://github.com/benning55", icon: FaGithub },
+              { href: "https://linkedin.com/in/sedthawuth-benning", icon: FaLinkedin },
+              { href: "mailto:bmaisonti@gmail.com", icon: FaEnvelope }
+            ].map((social, index) => (
+              <motion.a 
+                key={index}
+                href={social.href}
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-3xl text-secondary hover:text-primary transition-colors"
+                variants={scaleIn}
+                whileHover={{ scale: 1.2, rotate: 5 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <social.icon />
+              </motion.a>
+            ))}
+          </motion.div>
         </motion.div>
       </header>
 
       <main className="container mx-auto px-4 py-16">
         {/* About Section */}
         <Section id="about">
-          <h2 className="section-title">Professional Summary</h2>
+          <motion.h2 
+            variants={fadeInUp}
+            className="section-title"
+          >
+            Professional Summary
+          </motion.h2>
           <motion.p 
+            variants={fadeInUp}
             className="text-lg text-foreground/80 leading-relaxed"
             whileHover={{ scale: 1.01 }}
             transition={{ duration: 0.2 }}
@@ -299,7 +422,12 @@ function App() {
 
         {/* Experience Section */}
         <Section id="experience" delay={0.2}>
-          <h2 className="section-title">Work Experience</h2>
+          <motion.h2 
+            variants={fadeInUp}
+            className="section-title"
+          >
+            Work Experience
+          </motion.h2>
           <div className="space-y-6 relative pl-4">
             {experiences.map((exp, index) => (
               <ExperienceCard key={index} {...exp} />
@@ -309,7 +437,12 @@ function App() {
 
         {/* Education Section */}
         <Section id="education" delay={0.4}>
-          <h2 className="section-title">Education</h2>
+          <motion.h2 
+            variants={fadeInUp}
+            className="section-title"
+          >
+            Education
+          </motion.h2>
           <div className="grid gap-6">
             <motion.div 
               className="experience-card glow-animation"
@@ -347,7 +480,12 @@ function App() {
 
         {/* Certifications Section */}
         <Section id="certifications" delay={0.6}>
-          <h2 className="section-title">Certifications</h2>
+          <motion.h2 
+            variants={fadeInUp}
+            className="section-title"
+          >
+            Certifications
+          </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <motion.div 
               className="experience-card"
@@ -381,11 +519,21 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-card py-8 border-t border-primary/20">
+      <motion.footer 
+        className="bg-card py-8 border-t border-primary/20"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
         <div className="container mx-auto px-4 text-center">
-          <p className="text-foreground/60">© 2024 Sedthawuth Maisonti. All rights reserved.</p>
+          <motion.p 
+            className="text-foreground/60"
+            whileHover={{ scale: 1.05 }}
+          >
+            © 2024 Sedthawuth Maisonti. All rights reserved.
+          </motion.p>
         </div>
-      </footer>
+      </motion.footer>
     </div>
   );
 }

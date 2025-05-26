@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    --background: 230 35% 7%;
-    --foreground: 214 32% 91%;
-    --card: 230 35% 9%;
-    --card-foreground: 214 32% 91%;
-    --popover: 230 35% 9%;
-    --popover-foreground: 214 32% 91%;
-    --primary: 221 83% 53%;
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 213 31% 91%;
+    --primary: 210 100% 52%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 199 89% 48%;
+    --secondary: 199 100% 50%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 230 35% 9%;
+    --muted: 223 47% 11%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 262 83% 58%;
+    --accent: 196 100% 50%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-    --border: 221 83% 53%;
-    --input: 221 83% 53%;
-    --ring: 221 83% 53%;
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+    --ring: 210 100% 52%;
     --radius: 0.5rem;
   }
 
@@ -74,12 +74,17 @@ code {
 }
 
 .skill-tag {
-  @apply px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary transition-all hover:bg-primary/20 cursor-pointer;
+  @apply px-3 py-1 rounded-full text-sm font-medium bg-muted text-primary border border-primary/20 transition-all hover:border-primary/40 hover:bg-primary/10;
 }
 
 .experience-card {
-  @apply p-6 rounded-lg bg-card border border-primary/20 transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5;
-  background: linear-gradient(to bottom right, rgba(var(--card) / 1), rgba(var(--muted) / 1));
+  @apply p-6 rounded-lg border border-border transition-all hover:border-primary/40;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--card) / 0.8),
+    rgba(var(--muted) / 0.8)
+  );
+  backdrop-filter: blur(10px);
 }
 
 .section-title {
@@ -102,10 +107,11 @@ code {
 
 .hero-gradient {
   background: 
-    radial-gradient(circle at 50% 0%, rgba(var(--primary) / 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 85% 30%, rgba(var(--secondary) / 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 15% 70%, rgba(var(--accent) / 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 50% 100%, rgba(var(--primary) / 0.3) 0%, transparent 50%);
+    radial-gradient(circle at 50% 0%, rgba(var(--primary) / 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(var(--secondary) / 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 15% 70%, rgba(var(--accent) / 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, rgba(var(--primary) / 0.15) 0%, transparent 50%),
+    linear-gradient(180deg, rgb(var(--background)), rgba(var(--background) / 0.9));
 }
 
 .glow {
@@ -141,8 +147,9 @@ code {
 }
 
 .glass-effect {
-  backdrop-filter: blur(8px);
-  background: rgba(var(--card) / 0.8);
+  backdrop-filter: blur(12px);
+  background: rgba(var(--background) / 0.8);
+  border-bottom: 1px solid rgba(var(--primary) / 0.1);
 }
 
 .profile-image {
