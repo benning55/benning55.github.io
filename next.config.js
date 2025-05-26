@@ -4,7 +4,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/benning' : '', // Replace 'benning' with your repo name
+  basePath: process.env.NODE_ENV === 'production' ? '/benning55.github.io' : '', // Updated to match repo name
 }
 
 module.exports = nextConfig 
